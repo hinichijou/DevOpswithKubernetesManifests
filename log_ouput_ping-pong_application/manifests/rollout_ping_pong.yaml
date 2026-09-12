@@ -1,0 +1,23 @@
+# Create a rollout resource
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  namespace: exercises
+  name: rollout-pingpong
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pingpongapp
+  # Reference an existing Deployment using workloadRef field
+  workloadRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: pingpongapp-dep
+    scaleDown: onsuccess
+  strategy:
+    canary:
+      steps:
+      - analysis:
+          templates:
+          - templateName: cpu-usage

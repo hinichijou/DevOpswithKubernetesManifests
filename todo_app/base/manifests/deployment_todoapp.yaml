@@ -1,0 +1,110 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: project
+  name: todoapp-frontend-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todoapp-frontend
+  template:
+    metadata:
+      labels:
+        app: todoapp-frontend
+    spec:
+      volumes: # Define volume
+        - name: todoapp
+          persistentVolumeClaim:
+            claimName: todoapp-claim
+      containers:
+        - name: todoapp-frontend
+          image: PROJECT/FRONTENDIMAGE
+          resources:
+            requests:
+              cpu: "75m"
+              memory: "100Mi"
+            limits:
+              cpu: "150m"
+              memory: "200Mi"
+          volumeMounts: # Mount volume
+            - name: todoapp
+              mountPath: /app/dynamic
+          envFrom:
+            - configMapRef:
+                name: todoappfrontend-config
+            - configMapRef:
+                name: todoappapiroutes-config
+          livenessProbe:
+            initialDelaySeconds: 5 # Initial delay until the liveness is tested
+            periodSeconds: 5 # How often to test
+            httpGet:
+               path: /health
+               port: 3000
+          readinessProbe:
+            initialDelaySeconds: 10 # Initial delay until the readiness is tested
+            periodSeconds: 5 # How often to test
+            httpGet:
+               path: /ready
+               port: 3000
+      securityContext:
+        fsGroup: 1001
+  strategy:
+    type: Recreate
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: project
+  name: todoapp-backend-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todoapp-backend
+  template:
+    metadata:
+      labels:
+        app: todoapp-backend
+    spec:
+      containers:
+        - name: todoapp-backend
+          image: PROJECT/BACKENDIMAGE
+          resources:
+            requests:
+              cpu: "75m"
+              memory: "100Mi"
+            limits:
+              cpu: "150m"
+              memory: "200Mi"
+          env:
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secret-postgres-config
+                  key: POSTGRES_PASSWORD
+          envFrom:
+            - configMapRef:
+                name: todoappbackend-config
+            - configMapRef:
+                name: postgres-config
+            - configMapRef:
+                name: nats-config
+          livenessProbe:
+            initialDelaySeconds: 5 # Initial delay until the liveness is tested
+            periodSeconds: 5 # How often to test
+            httpGet:
+               path: /health
+               port: 3001
+          readinessProbe:
+            initialDelaySeconds: 10 # Initial delay until the readiness is tested
+            periodSeconds: 5 # How often to test
+            httpGet:
+               path: /ready
+               port: 3001
+      securityContext:
+        fsGroup: 1001
+  strategy:
+    type: Recreate

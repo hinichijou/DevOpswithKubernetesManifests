@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  namespace: exercises
+  name: cpu-usage
+spec:
+  metrics:
+  - name: cpu-usage
+    initialDelay: 120s
+    # find a suitable value. How many cpu cores (taking all of cpu core seconds for a single core over a timespan means 1 core) can the deployment take.
+    failureCondition: result > 0.02
+    interval: 30s
+    count: 7
+    provider:
+      prometheus:
+        # DNS name for my Prometheus, find yours with kubectl describe svc ...
+        address: http://prom-kube-prometheus-stack-prometheus.prometheus.svc.cluster.local:9090
+        query: |
+          scalar(
+            sum(rate(container_cpu_usage_seconds_total{image!="",job="kubelet",metrics_path="/metrics/cadvisor",namespace="exercises"}[90s]))
+          )

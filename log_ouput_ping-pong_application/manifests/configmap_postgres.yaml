@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+  namespace: exercises
+data:
+  PGUSER: postgres
+  PGHOST: postgres-svc
+  PGDATABASE: pingpong

@@ -1,0 +1,59 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: backup
+  # Setting the namespace prevents patching if not set to the same namespace. Probably generally best to set the namespace always in the kustomization file
+  # namespace: project
+spec:
+  schedule: "0 0 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          # 3.10: Based on https://docs.cloud.google.com/kubernetes-engine/docs/how-to/workload-identity
+          serviceAccountName: db-backup-sa
+          nodeSelector:
+            iam.gke.io/gke-metadata-server-enabled: "true"
+          containers:
+          - name: backup
+            image: PROJECT/DBBACKUPJOBIMAGE
+            resources:
+              requests:
+                cpu: "200m"
+                memory: "300Mi"
+              limits:
+                cpu: "400m"
+                memory: "700Mi"
+            env:
+              - name: POSTGRES_SVC
+                value: postgres-svc
+              - name: POSTGRES_PORT
+                value: "5432"
+              - name: BUCKET_URL
+                value: https://storage.googleapis.com/upload/storage/v1/b/project-db-backup-bucket
+              - name: METADATA_URL
+                value: http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token
+              - name: BACKUP_PATH
+                value: /usr/src/app
+              - name: BACKUP_FILE
+                value: backup.sql
+              - name: NAMESPACE
+                valueFrom:
+                  fieldRef:
+                    fieldPath: metadata.namespace
+              - name: POSTGRES_USER
+                valueFrom:
+                  configMapKeyRef:
+                    name: postgres-config
+                    key: PGUSER
+              - name: POSTGRES_DB
+                valueFrom:
+                  configMapKeyRef:
+                    name: postgres-config
+                    key: PGDATABASE
+              - name: PGPASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: secret-postgres-config
+                    key: POSTGRES_PASSWORD
+          restartPolicy: OnFailure

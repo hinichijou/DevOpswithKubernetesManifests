@@ -1,0 +1,11 @@
+# We simplify the Prometheus setup in prom-values.yaml by disabling alerting and remote metric forwarding.
+# We also set that metrics are collected and stored locally only.
+
+alertmanager:
+  enabled: false
+
+pushgateway:
+  enabled: false
+
+server:
+  remoteWrite: []

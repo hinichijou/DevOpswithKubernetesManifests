@@ -1,0 +1,32 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: exercises
+images:
+- digest: sha256:9781be965af018df62304d811d1b9c522dcbe5a1d995a5162e0c97857e14c982
+  name: PROJECT/LOGOUTPUTREADERIMAGE
+  newName: hinichijou/log_output-reader
+- digest: sha256:0ce90bfd2870485445dac1afcb259953e4118dfc99eb2ce190d9f9983d875748
+  name: PROJECT/LOGOUTPUTWRITERIMAGE
+  newName: hinichijou/log_output-writer
+- digest: sha256:a843e248149a3b360fb83e536824697bd70f9da7869a03f1ee36b23e3be8d7aa
+  name: PROJECT/PINGPONGAPPIMAGE
+  newName: hinichijou/pingpong_application
+configMapGenerator:
+- files:
+  - assets/information.txt
+  name: information-txt-config
+resources:
+- manifests/analysistemplate_cpu_usage.yaml
+- manifests/persistentvolumeclaim_log_output.yaml
+- manifests/configmap_log_output.yaml
+- manifests/deployment_log_output.yaml
+- manifests/service_log_output_reader.yaml
+- manifests/route_log_output.yaml
+- manifests/rollout_ping_pong.yaml
+- manifests/deployment_ping_pong.yaml
+- manifests/service_ping_pong.yaml
+- manifests/route_ping_pong.yaml
+- manifests/service_postgres.yaml
+- manifests/statefulset_postgres.yaml
+- manifests/sealed_secret_postgres.yaml
+- manifests/configmap_postgres.yaml

@@ -1,0 +1,17 @@
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+  name: todo-frontend-route
+spec:
+  parentRefs:
+  - name: infra-gateway
+    namespace: infra
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        # To redefine this needs to be set as the application basePath on build time as well as changing the configmap value
+        value: /todoapp-prod
+    backendRefs:
+    - name: todoapp-frontend-svc
+      port: 2345

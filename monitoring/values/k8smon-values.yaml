@@ -1,0 +1,22 @@
+# We configure Alloy to collect pod logs from the node filesystem and forward them to the local Loki instance.
+# Logs are tagged with the cluster name (that is set to my-cluster), and self-reporting is disabled.
+
+cluster:
+  name: my-cluster
+
+destinations:
+  localLoki:
+    type: loki
+    url: http://loki-gateway.monitoring.svc.cluster.local/loki/api/v1/push
+    tenantId: "1"
+
+podLogsViaLoki:
+  enabled: true
+  collector: alloy-singleton
+
+collectors:
+  alloy-singleton:
+    presets: [filesystem-log-reader]
+
+selfReporting:
+  enabled: false

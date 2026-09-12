@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: todoappfrontend-config
+data:
+  # The frontend targets the Next.js backend by default which goes through the gateway and gets rerouted to api backend depending on path
+  NEXT_PUBLIC_API_URL: "/todoapp-prod"

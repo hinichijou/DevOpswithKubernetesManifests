@@ -1,0 +1,24 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+# The base kustomization having images may cause the overlay updates to be completely ignored
+# Also removing the namespace since it seems to always cause problems when patching/overlaying
+configMapGenerator:
+- files:
+  - manifests/init_todo_db.sql
+  name: db-init
+  # Deployment to GKE is done by decrypting enc_secret_postgres.yaml and applying it directly in the GitHub workflow.
+  # Not pushed to GitHub, would probably make sense as an env secret if deploying to GKE. Could also use Sealed Secret.
+  # - manifests/secret_discord_webhook.yaml
+resources:
+- manifests/persistentvolumeclaim_todoapp.yaml
+- manifests/configmap_nats.yaml
+- manifests/configmap_todoapp.yaml
+- manifests/deployment_todoapp.yaml
+- manifests/service_todoapp.yaml
+- manifests/service_postgres.yaml
+- manifests/statefulset_postgres.yaml
+- manifests/configmap_postgres.yaml
+- manifests/wikipedia_todo_job.yaml
+- manifests/db_backup_job.yaml
+- manifests/configmap_broadcaster.yaml
+- manifests/deployment_broadcaster.yaml

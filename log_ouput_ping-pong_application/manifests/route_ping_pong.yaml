@@ -1,0 +1,24 @@
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+  namespace: exercises
+  name: pingpongapp-route
+spec:
+  parentRefs:
+  - name: infra-gateway
+    namespace: infra
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /pingpong
+    backendRefs:
+    - name: pingpongapp-svc
+      port: 2345
+    filters:
+      - type: URLRewrite
+        urlRewrite:
+          path:
+            # type ReplaceFullPath made more sense based on the gateway api documentation but apparently GKE Gateway Controller does not support the configuration
+            type: ReplacePrefixMatch
+            replacePrefixMatch: /

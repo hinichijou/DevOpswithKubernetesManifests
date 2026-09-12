@@ -1,0 +1,21 @@
+# The Loki setup is tweaked by running it as a single instance with local filesystem storage.
+# Distributed components and replication are disabled, keeping the configuration minimal.
+
+deploymentMode: SingleBinary
+
+singleBinary:
+  replicas: 1
+
+backend:
+  replicas: 0
+read:
+  replicas: 0
+write:
+  replicas: 0
+
+loki:
+  commonConfig:
+    replication_factor: 1
+  storage:
+    type: filesystem
+  useTestSchema: true

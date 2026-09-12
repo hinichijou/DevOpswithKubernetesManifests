@@ -1,0 +1,38 @@
+name: 'Build Image'
+description: 'Builds images and adds them to kustomization.yaml'
+inputs:
+  namespace:
+    required: true
+  image_name:
+    required: true
+  app_folder:
+    required: true
+  kustomization_folder:
+    required: true
+  build_folder:
+    required: true
+  image_alias:
+    required: true
+  build_arg_string:
+    required: false
+
+runs:
+  using: "composite"
+  steps:
+    - name: Build & push
+      id: 'build'
+      working-directory: "${{ inputs.app_folder }}"
+      shell: bash
+      # awk: print the third field delimited by space from the line containing digest
+      run: |
+        IMAGE_TAG="${{ inputs.namespace }}/${{ inputs.image_name }}"
+        echo "image_tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
+        docker build ${{ inputs.build_arg_string }} --tag $IMAGE_TAG "${{ inputs.build_folder }}"
+        echo "sha=$(docker push $IMAGE_TAG | awk '/digest:/ { print $3 }')" >> $GITHUB_OUTPUT
+
+    - name: Set to kustomization
+      working-directory: "${{ inputs.kustomization_folder }}"
+      shell: bash
+      run: |
+        IMAGE_PATH="${{ inputs.namespace }}/${{ inputs.image_name }}"
+        kustomize edit set image "${{ inputs.image_alias }}"="$IMAGE_PATH@${{ steps.build.outputs.sha }}"

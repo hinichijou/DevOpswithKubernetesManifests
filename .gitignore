@@ -1,0 +1,6 @@
+*.ps1
+*.txt
+secret*
+debug
+cleanup-policy.json
+test.sh

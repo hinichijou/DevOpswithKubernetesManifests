@@ -1,0 +1,34 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: project-production
+# Seems to cause potential issues
+# namePrefix: prod-
+resources:
+- resources/sealed_secret_postgres_production.yaml
+- resources/route_frontend_prod.yaml
+- resources/route_backend_prod.yaml
+- ./../../base
+patches:
+- path: patches/persistentvolumeclaim_todoapp_prod.yaml
+- path: patches/configmap_todoapp_prod.yaml
+images:
+- digest: sha256:5732d3b30deef0c95a439944ac2067b90634a0f1dd6badb560cddf19597fd8af
+  name: PROJECT/BACKENDIMAGE
+  newName: hinichijou/todo_app_backend-production
+  newTag: "4.9"
+- digest: sha256:11d2a1c3f82439d71d05a360ecdd4a05d1b669b7f474511aafd6d094f651a64c
+  name: PROJECT/BROADCASTERIMAGE
+  newName: hinichijou/broadcaster-production
+  newTag: "4.9"
+- digest: sha256:dba5101063b0172621a5773b6e106fce110ffd1875ce17668d794755776a517f
+  name: PROJECT/DBBACKUPJOBIMAGE
+  newName: hinichijou/db_backup_job-production
+  newTag: "4.9"
+- digest: sha256:446a0db35130433a1f8425199879c406281a536fd72412fff0cc6711194beb40
+  name: PROJECT/FRONTENDIMAGE
+  newName: hinichijou/todo_app_frontend-production
+  newTag: "4.9"
+- digest: sha256:c79c87f61ee852f8ab0d8dc1e0e6a1ffa8e5d599d986bd592b01ec38e1b78434
+  name: PROJECT/WIKIPEDIATODOJOBIMAGE
+  newName: hinichijou/wikipedia_todo_job-production
+  newTag: "4.9"

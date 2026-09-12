@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: todo-app
+  namespace: argocd
+spec:
+  goTemplate: true
+  generators:
+  - list:
+      elements:
+      - name: todoapp-production
+        path: todo_app/overlays/prod
+        targetRevision: HEAD
+      - name: todoapp-staging
+        path: todo_app/overlays/staging
+        targetRevision: HEAD
+  template:
+    metadata:
+      name: '{{.name}}'
+      namespace: argocd
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/hinichijou/DevOpswithKubernetesManifests.git
+        targetRevision: '{{.targetRevision}}'
+        path: '{{.path}}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: default
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true

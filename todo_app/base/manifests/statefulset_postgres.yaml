@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres-stset
+spec:
+  serviceName: postgres-svc
+  replicas: 2
+  selector:
+    matchLabels:
+      app: postgresapp
+  template:
+    metadata:
+      labels:
+        app: postgresapp
+    spec:
+      volumes:
+        - name: db-init-vol
+          configMap:
+            name: db-init
+      containers:
+        - name: postgres
+          image: postgres:18-alpine3.24
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "300Mi"
+            limits:
+              cpu: "400m"
+              memory: "700Mi"
+          ports:
+            - name: web
+              containerPort: 5432
+          volumeMounts:
+            - name: postgres-data-storage
+              mountPath: /var/lib/postgresql
+            - name: db-init-vol
+              mountPath: /usr/src/app
+              readOnly: true
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: PGUSER
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: PGDATABASE
+          envFrom:
+            - secretRef:
+                name: secret-postgres-config
+          lifecycle:
+            postStart:
+              exec:
+                #Database initialization from a file
+                command:
+                  - /bin/sh
+                  - -c
+                  - >-
+                    sleep 5 &&
+                    PGPASSWORD=$POSTGRES_PASSWORD
+                    psql -w
+                    -U $POSTGRES_USER
+                    -d $POSTGRES_DB
+                    -f
+                    /usr/src/app/init_todo_db.sql
+  volumeClaimTemplates:
+    - metadata:
+        name: postgres-data-storage
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        # 3.5: Google Kubernetes Engine will automatically provision a persistent disk for your PersistentVolumeClaim - just don't set the storage class. Uncomment for local use.
+        storageClassName: local-path
+        resources:
+          requests:
+            storage: 100Mi

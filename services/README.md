@@ -1,0 +1,1 @@
+The idea is to collect necessary resources and instructions for third party services like ArgoCD here that can be used as a part of the application deployment stack.

@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: exercises
+  name: logoutput-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: logoutput
+  template:
+    metadata:
+      labels:
+        app: logoutput
+    spec:
+      volumes: # Define volume
+        - name: log-output
+          persistentVolumeClaim:
+            claimName: log-output-claim
+        - name: information-vol
+          configMap:
+            name: information-txt-config
+            # If you omit the items array entirely, every key in the ConfigMap becomes a file with the same name as the key.
+            #items:
+            #- key:
+            #  path:
+      containers:
+        - name: logoutput-writer
+          image: PROJECT/LOGOUTPUTWRITERIMAGE
+          volumeMounts: # Mount volume
+          - name: log-output
+            mountPath: /usr/src/app/files
+        - name: logoutput-reader
+          image: PROJECT/LOGOUTPUTREADERIMAGE
+          envFrom:
+            - configMapRef:
+                name: logoutput-config
+          volumeMounts: # Mount volume
+          - name: log-output
+            mountPath: /usr/src/app/files
+          - name: information-vol
+            mountPath: /usr/src/app
+            readOnly: true
+          livenessProbe:
+            initialDelaySeconds: 5 # Initial delay until the liveness is tested
+            periodSeconds: 5 # How often to test
+            httpGet:
+               path: /health
+               port: 3000
+          readinessProbe:
+            initialDelaySeconds: 10 # Initial delay until the readiness is tested
+            periodSeconds: 5 # How often to test
+            httpGet:
+               path: /ready
+               port: 3000
+      securityContext:
+        fsGroup: 1001
+  strategy:
+    type: Recreate

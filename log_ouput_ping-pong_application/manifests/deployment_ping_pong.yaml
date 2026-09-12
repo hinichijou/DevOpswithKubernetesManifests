@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: exercises
+  name: pingpongapp-dep
+spec:
+  # Task 4.4: this deployment is referred from an argo rollout
+  replicas: 0
+  selector:
+    matchLabels:
+      app: pingpongapp
+  template:
+    metadata:
+      labels:
+        app: pingpongapp
+    spec:
+      containers:
+        - name: pingpong
+          image: PROJECT/PINGPONGAPPIMAGE
+          env:
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secret-postgres-config
+                  key: POSTGRES_PASSWORD
+          envFrom:
+            - configMapRef:
+                name: postgres-config
+          livenessProbe:
+            initialDelaySeconds: 5 # Initial delay until the liveness is tested
+            periodSeconds: 5 # How often to test
+            httpGet:
+               path: /health
+               port: 3000
+          readinessProbe:
+            initialDelaySeconds: 10 # Initial delay until the readiness is tested
+            periodSeconds: 5 # How often to test
+            httpGet:
+               path: /ready
+               port: 3000
+      securityContext:
+        fsGroup: 1001
+  strategy:
+    type: Recreate
