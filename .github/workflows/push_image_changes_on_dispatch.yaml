@@ -4,54 +4,28 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        required: true
         type: string
       tag:
-        required: false
         type: string
-      ping_pong_sha:
-        required: true
+      ping_pong_image:
         type: string
-      lo_reader_sha:
-        required: true
+      lo_reader_image:
         type: string
-      lo_writer_sha:
-        required: true
+      lo_writer_image:
         type: string
-      todo_frontend_sha:
-        required: true
+      todo_frontend_image:
         type: string
-      todo_backend_sha:
-        required: true
+      todo_backend_image:
         type: string
-      wikipedia_job_sha:
-        required: true
+      wikipedia_job_image:
         type: string
-      db_backup_job_sha:
-        required: true
+      db_backup_job_image:
         type: string
-      broadcaster_sha:
-        required: true
+      broadcaster_image:
         type: string
 
 
 env:
-  PINGPONG_IMAGE_NAME: pingpong_application
-  PINGPONG_IMAGE_ALIAS: PROJECT/PINGPONGAPPIMAGE
-  LOG_OUTPUT_READER_IMAGE_NAME: log_output-reader
-  LOG_OUTPUT_READER_IMAGE_ALIAS: PROJECT/LOGOUTPUTREADERIMAGE
-  LOG_OUTPUT_WRITER_IMAGE_NAME: log_output-writer
-  LOG_OUTPUT_WRITER_IMAGE_ALIAS: PROJECT/LOGOUTPUTWRITERIMAGE
-  TODO_FRONTEND_IMAGE_NAME: todo_app_frontend
-  TODO_FRONTEND_IMAGE_ALIAS: PROJECT/FRONTENDIMAGE
-  TODO_BACKEND_IMAGE_NAME: todo_app_backend
-  TODO_BACKEND_IMAGE_ALIAS: PROJECT/BACKENDIMAGE
-  WIKIPEDIA_JOB_IMAGE_NAME: wikipedia_todo_job
-  WIKIPEDIA_JOB_IMAGE_ALIAS: PROJECT/WIKIPEDIATODOJOBIMAGE
-  DB_BACKUP_JOB_IMAGE_NAME: db_backup_job
-  DB_BACKUP_JOB_IMAGE_ALIAS: PROJECT/DBBACKUPJOBIMAGE
-  BROADCASTER_IMAGE_NAME: broadcaster
-  BROADCASTER_IMAGE_ALIAS: PROJECT/BROADCASTERIMAGE
   LOG_OUTPUT_PINGPONG_APP_KUSTOMIZATION_FOLDER: log_output_ping-pong_application
   # The return value is the one that is evaluated last
   TODO_KUSTOMIZATION_FOLDER: ${{ inputs.environment == 'production' && 'todo_app/overlays/prod' || 'todo_app/overlays/staging' }}
@@ -70,20 +44,20 @@ jobs:
         id: 'lpa_images'
         run: |
           echo "provided=${{
-              inputs.ping_pong_sha != '' &&
-              inputs.lo_writer_sha != '' &&
-              inputs.lo_reader_sha != ''
+              inputs.ping_pong_image != '' &&
+              inputs.lo_writer_image != '' &&
+              inputs.lo_reader_image != ''
             }}" >> $GITHUB_OUTPUT
 
       - name: 'Are we deploying todo app'
         id: 'todo_images'
         run: |
           echo "provided=${{
-              inputs.todo_frontend_sha != '' &&
-              inputs.todo_backend_sha != '' &&
-              inputs.wikipedia_job_sha != '' &&
-              inputs.db_backup_job_sha != '' &&
-              inputs.broadcaster_sha != ''
+              inputs.todo_frontend_image != '' &&
+              inputs.todo_backend_image != '' &&
+              inputs.wikipedia_job_image != '' &&
+              inputs.db_backup_job_image != '' &&
+              inputs.broadcaster_image != ''
             }}" >> $GITHUB_OUTPUT
 
       - name: Set up Kustomize
@@ -94,20 +68,20 @@ jobs:
         shell: bash
         working-directory: "${{ env.LOG_OUTPUT_PINGPONG_APP_KUSTOMIZATION_FOLDER }}"
         run: |
-          kustomize edit set image "${{ env.PINGPONG_IMAGE_ALIAS }}"="${{ secrets.DOCKERHUB_USERNAME }}/${{ env.PINGPONG_IMAGE_NAME }}@${{ inputs.ping_pong_sha }}"
-          kustomize edit set image "${{ env.LOG_OUTPUT_WRITER_IMAGE_ALIAS }}"="${{ secrets.DOCKERHUB_USERNAME }}/${{ env.LOG_OUTPUT_WRITER_IMAGE_NAME }}@${{ inputs.lo_writer_sha}}"
-          kustomize edit set image "${{ env.LOG_OUTPUT_READER_IMAGE_ALIAS }}"="${{ secrets.DOCKERHUB_USERNAME }}/${{ env.LOG_OUTPUT_READER_IMAGE_NAME }}@${{ inputs.lo_reader_sha}}"
+          kustomize edit set image "${{ inputs.ping_pong_image }}"
+          kustomize edit set image "${{ inputs.lo_writer_image}}"
+          kustomize edit set image "${{ inputs.lo_reader_image}}"
 
       - name : 'Set todo images'
         if: steps.todo_images.outputs.provided
         shell: bash
         working-directory: "${{ env.TODO_KUSTOMIZATION_FOLDER }}"
         run: |
-          kustomize edit set image "${{ env.TODO_FRONTEND_IMAGE_ALIAS }}"="${{ secrets.DOCKERHUB_USERNAME }}/${{ env.TODO_FRONTEND_IMAGE_NAME }}-${{ inputs.environment }}@${{ inputs.todo_frontend_sha }}"
-          kustomize edit set image "${{ env.TODO_BACKEND_IMAGE_ALIAS }}"="${{ secrets.DOCKERHUB_USERNAME }}/${{ env.TODO_BACKEND_IMAGE_NAME }}-${{ inputs.environment }}@${{ inputs.todo_backend_sha }}"
-          kustomize edit set image "${{ env.WIKIPEDIA_JOB_IMAGE_ALIAS }}"="${{ secrets.DOCKERHUB_USERNAME }}/${{ env.WIKIPEDIA_JOB_IMAGE_NAME }}-${{ inputs.environment }}@${{ inputs.wikipedia_job_sha}}"
-          kustomize edit set image "${{ env.DB_BACKUP_JOB_IMAGE_ALIAS }}"="${{ secrets.DOCKERHUB_USERNAME }}/${{ env.DB_BACKUP_JOB_IMAGE_NAME }}-${{ inputs.environment }}@${{ inputs.db_backup_job_sha}}"
-          kustomize edit set image "${{ env.BROADCASTER_IMAGE_ALIAS }}"="${{ secrets.DOCKERHUB_USERNAME }}/${{ env.BROADCASTER_IMAGE_NAME }}-${{ inputs.environment }}@${{ inputs.broadcaster_sha}}"
+          kustomize edit set image "${{ inputs.todo_frontend_image }}"
+          kustomize edit set image "${{ inputs.todo_backend_image }}"
+          kustomize edit set image "${{ inputs.wikipedia_job_image}}"
+          kustomize edit set image "${{ inputs.db_backup_job_image}}"
+          kustomize edit set image "${{ inputs.broadcaster_image}}"
 
       - name: Commit lpa kustomization.yaml to GitHub
         if: steps.lpa_images.outputs.provided

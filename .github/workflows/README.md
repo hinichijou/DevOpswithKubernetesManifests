@@ -6,10 +6,8 @@ Workflow triggered on workflow dispatch that modifies the `kustomization.yaml` w
 
 Argo CD can be configured to watch for changes to the application manifests and any changes to a specific `kustomization.yaml` or the manifests it refers to will trigger a new deployment of the application to a local cluster.
 
-Since the project app supports separate staging and production environments while the log_ouput_ping-pong_application does not the build logic and image naming schemes slightly differ.
+Inputs:
 
-* The log output ping-pong app: the images are named: *image-name*:*commit-sha*. Built only on push to the source code repository main branch if there are changes to relevant files.
-
-* The todo app staging: the images are named: *image-name*-staging:*commit-sha*. Staging images are built only on push to the source code repository main branch if there are changes to relevant files.
-
-* The todo app production: the images are named: *image-name*-production:*tag-name*. Production images are built only when source code repository gets pushed a tag.
+* `environment`: not required, basically expected to be `staging` or `production`. If empty will be treated as staging.
+* `tag`: not required, if the pipeline is triggered by tagging the source code repo is expected to be the same as the tag triggering the workflow. If empty the manifest update commit will not be tagged. Only todo app commits are tagged as the tag workflow was only required for the project.
+* `_image` suffixed variables: not required explicitly, but all variables for a given application should be set to update the application manifest images. Expected to be in the format: `IMAGE_ALIAS_IN_MANIFEST=DOCKERHUB_NAMESPACE/IMAGE_NAME-ENVIRONMENT@sha` for todo app images and `IMAGE_ALIAS_IN_MANIFEST=DOCKERHUB_NAMESPACE/IMAGE_NAME@sha` for log output ping-pong application images.
