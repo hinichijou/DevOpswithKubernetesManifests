@@ -9,9 +9,9 @@ on:
         type: string
       ping_pong_image:
         type: string
-      lo_reader_image:
+      log_output_reader_image:
         type: string
-      lo_writer_image:
+      log_output_writer_image:
         type: string
       todo_frontend_image:
         type: string
@@ -39,14 +39,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      # Expects the shas of all of the images to be passed, otherwise not deployed
+      # Expects the shas of all of the images for a single app to be passed, otherwise not deployed
       - name: 'Are we deploying lpa'
         id: 'lpa_images'
         run: |
           echo "provided=${{
               inputs.ping_pong_image != '' &&
-              inputs.lo_writer_image != '' &&
-              inputs.lo_reader_image != ''
+              inputs.log_output_writer_image != '' &&
+              inputs.log_output_reader_image != ''
             }}" >> $GITHUB_OUTPUT
 
       - name: 'Are we deploying todo app'
@@ -61,6 +61,7 @@ jobs:
             }}" >> $GITHUB_OUTPUT
 
       - name: Set up Kustomize
+        if: steps.lpa_images.outputs.provided || steps.todo_images.outputs.provided
         uses: imranismail/setup-kustomize@v3
 
       - name : 'Set lpa images'
@@ -69,8 +70,8 @@ jobs:
         working-directory: "${{ env.LOG_OUTPUT_PINGPONG_APP_KUSTOMIZATION_FOLDER }}"
         run: |
           kustomize edit set image "${{ inputs.ping_pong_image }}"
-          kustomize edit set image "${{ inputs.lo_writer_image}}"
-          kustomize edit set image "${{ inputs.lo_reader_image}}"
+          kustomize edit set image "${{ inputs.log_output_writer_image}}"
+          kustomize edit set image "${{ inputs.log_output_reader_image}}"
 
       - name : 'Set todo images'
         if: steps.todo_images.outputs.provided
