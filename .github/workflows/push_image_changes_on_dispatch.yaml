@@ -61,11 +61,11 @@ jobs:
             }}" >> $GITHUB_OUTPUT
 
       - name: Set up Kustomize
-        if: steps.lpa_images.outputs.provided || steps.todo_images.outputs.provided
+        if: steps.lpa_images.outputs.provided == 'true' || steps.todo_images.outputs.provided == 'true'
         uses: imranismail/setup-kustomize@v3
 
       - name : 'Set lpa images'
-        if: steps.lpa_images.outputs.provided
+        if: steps.lpa_images.outputs.provided == 'true'
         shell: bash
         working-directory: "${{ env.LOG_OUTPUT_PINGPONG_APP_KUSTOMIZATION_FOLDER }}"
         run: |
@@ -74,7 +74,7 @@ jobs:
           kustomize edit set image "${{ inputs.log_output_reader_image}}"
 
       - name : 'Set todo images'
-        if: steps.todo_images.outputs.provided
+        if: steps.todo_images.outputs.provided == 'true'
         shell: bash
         working-directory: "${{ env.TODO_KUSTOMIZATION_FOLDER }}"
         run: |
@@ -85,14 +85,14 @@ jobs:
           kustomize edit set image "${{ inputs.broadcaster_image}}"
 
       - name: Commit lpa kustomization.yaml to GitHub
-        if: steps.lpa_images.outputs.provided
+        if: steps.lpa_images.outputs.provided == 'true'
         uses: EndBug/add-and-commit@v10
         with:
           add: '${{ env.LOG_OUTPUT_PINGPONG_APP_KUSTOMIZATION_FOLDER }}/kustomization.yaml'
           message: New log output ping-pong application version released ${{ github.sha }}
 
       - name: Commit todo app kustomization.yaml to GitHub
-        if: steps.todo_images.outputs.provided
+        if: steps.todo_images.outputs.provided == 'true'
         uses: EndBug/add-and-commit@v10
         with:
           add: '${{ env.TODO_KUSTOMIZATION_FOLDER }}/kustomization.yaml'
