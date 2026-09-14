@@ -22,9 +22,9 @@ images:
 - digest: sha256:c9a16eadb92c69fb5a184432bfe4f02d84591185ff803e59fc91a97ee09b83bd
   name: PROJECT/DBBACKUPJOBIMAGE
   newName: hinichijou/db_backup_job-staging
-- digest: sha256:d94d74fe5f493640c4134e97efeb694a1e78b2ce9c21724db218c3109491cd02
+- digest: sha256:1c5bc69de7b08c22281f681cd9134d3708ea5489b4d5c95b09bf6b12977155ee
   name: PROJECT/FRONTENDIMAGE
   newName: hinichijou/todo_app_frontend-staging
-- digest: sha256:13541ea45740f8c87a62e866d561575078592f1c8a9af30100259cb4a1398cf1
+- digest: sha256:05627efe7b558b9523ce3567a2f45bb0df6cde9a0b77b186e48eda3f8292ae02
   name: PROJECT/WIKIPEDIATODOJOBIMAGE
   newName: hinichijou/wikipedia_todo_job-staging
