@@ -8,7 +8,7 @@ images:
 - digest: sha256:0ce90bfd2870485445dac1afcb259953e4118dfc99eb2ce190d9f9983d875748
   name: PROJECT/LOGOUTPUTWRITERIMAGE
   newName: hinichijou/log_output-writer
-- digest: sha256:1c44918d322c2c9486576b9bed0f3acd09e607f084a196bbec04345d9d84df88
+- digest: sha256:246aff4ddab3851122c660daebdd8778ad6e6e8402952e4fca5d863e882380f3
   name: PROJECT/PINGPONGAPPIMAGE
   newName: hinichijou/pingpong_application
 configMapGenerator:
