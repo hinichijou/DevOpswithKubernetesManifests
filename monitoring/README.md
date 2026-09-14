@@ -15,7 +15,7 @@ Run a Kubernetes cluster if you aren't running one already. For example with k3d
 
 Create a namespace for the monitoring resources with `kubectl create namespace monitoring`.
 
-The [`values folder`](https://github.com/hinichijou/DevOpswithKubernetesManifests/tree/main/monitoring/values) contains configuration files for each of the components.
+The [`values folder`](https://github.com/hinichijou/DevOpswithKubernetesManifests/tree/4.10/monitoring/values) contains configuration files for each of the components.
 
 Install the monitoring components by running the following in the values folder. The dependency order needs to be followed: Alloy needs Loki running and Grafana needs both Prometheus and Loki available:
 ```

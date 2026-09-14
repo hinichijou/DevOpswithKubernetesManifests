@@ -2,7 +2,7 @@
 
 Workflow triggered on workflow dispatch that modifies the `kustomization.yaml` with the latest image tags and then commits the `kustomization.yaml`.
 
-[push_image_changes_on_dispatch.yaml](https://github.com/hinichijou/DevOpswithKubernetesManifests/tree/main/.github/workflows/push_image_changes_on_dispatch.yaml) defines the GitHub workflow. The workflow is triggered by the [source code repository](https://github.com/hinichijou/DevOpswithKubernetes/tree/main/.github/workflows/) that builds the application images. The workflow edits the `kustomization.yaml` of todo_app and/or log output ping-pong application and commits and tags the changes if necessary.
+[push_image_changes_on_dispatch.yaml](https://github.com/hinichijou/DevOpswithKubernetesManifests/tree/4.10/.github/workflows/push_image_changes_on_dispatch.yaml) defines the GitHub workflow. The workflow is triggered by the [source code repository](https://github.com/hinichijou/DevOpswithKubernetes/tree/4.10/.github/workflows/) that builds the application images. The workflow edits the `kustomization.yaml` of todo_app and/or log output ping-pong application and commits and tags the changes if necessary.
 
 Argo CD can be configured to watch for changes to the application manifests and any changes to a specific `kustomization.yaml` or the manifests it refers to will trigger a new deployment of the application to a local cluster.
 
