@@ -100,5 +100,5 @@ jobs:
           # Pushes the detached head to main
           push: 'origin HEAD:main'
           # If I understood correctly this should be ok if tag is not provided, there won't be a tag with empty input
-          tag: ${{ inputs.tag }}
+          tag: '${{ inputs.tag }} --force'
           tag_push: '--force'
