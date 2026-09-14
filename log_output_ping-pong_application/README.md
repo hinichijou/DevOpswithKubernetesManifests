@@ -1,6 +1,6 @@
 ## Log output and ping-pong applications
 
-Configuration files and Kubernetes cluster running instructions for the application. The source code for the application can be found [here](https://github.com/hinichijou/DevOpswithKubernetes/tree/4.10/log_ouput_ping-pong_application)
+Configuration files and Kubernetes cluster running instructions for the application. The source code for the application can be found [here](https://github.com/hinichijou/DevOpswithKubernetes/tree/4.10/log_output_ping-pong_application)
 
 First run a Kubernetes cluster. In chapter 5 of the course we move back to using a local cluster. For example with [k3d](https://github.com/k3d-io/k3d) you can create a cluster with `k3d cluster create -p 8081:80@loadbalancer --agents 2 --k3s-arg '--disable=traefik@server:0'`. Local port 8081 is opened to port 80 in load balancer. `--disable=traefik@server:0` is required for the gateway api installation. If the cluster already exists it can be started with `k3d cluster start`.
 
