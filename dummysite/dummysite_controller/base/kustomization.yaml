@@ -1,0 +1,7 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+images:
+  - name: DUMMYSITECONTROLLER
+    newName: hinichijou/dummysite_controller:uymq0xfv
+resources:
+  - manifests/deployment_controller_dummysite.yaml
