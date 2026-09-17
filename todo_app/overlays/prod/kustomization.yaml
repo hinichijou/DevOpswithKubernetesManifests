@@ -12,18 +12,18 @@ patches:
 - path: patches/persistentvolumeclaim_todoapp_prod.yaml
 - path: patches/configmap_todoapp_prod.yaml
 images:
-- digest: sha256:96c6f8397aadf26307bfa2fb102d5892977c9738e59c152e731101f390b83e1b
+- digest: sha256:87c181df844a7e741f023c16ef3657cc1b9291041aabbf9de33fbceaa2524a89
   name: PROJECT/BACKENDIMAGE
   newName: hinichijou/todo_app_backend-production
-- digest: sha256:df6e1fa12dbb680186f58e513a83774232de382ecd6a936e44d3cb3882cf2ff1
+- digest: sha256:3445435e0624797d6e20554766cb7cdd86826a4e6a1c9cd4da2ddd044fe8805f
   name: PROJECT/BROADCASTERIMAGE
   newName: hinichijou/broadcaster-production
-- digest: sha256:0fc023cb2bb731a159a8fd34a35e303c3384d42d102416bfc620aafcb284913e
+- digest: sha256:6dd8932bfba98a496c12a308061366a3c5cf7517d7e6568ac6bfd2d5699ef04d
   name: PROJECT/DBBACKUPJOBIMAGE
   newName: hinichijou/db_backup_job-production
-- digest: sha256:8f04c6b7b5bcda8efa97d038400c64c6edf420c0029df6c424d19680064453a6
+- digest: sha256:14597a0afb41d39618d1035400f2560a347a3492172431c3f2839d584e872978
   name: PROJECT/FRONTENDIMAGE
   newName: hinichijou/todo_app_frontend-production
-- digest: sha256:292b6eb8dd35661a36fd648e236e7bbda40c6e8f269d4641fbcf4f940ae3b32f
+- digest: sha256:1b6c718a5d4e4d2ba1df359bc8f04eea734355474a749896b51505e591562d0d
   name: PROJECT/WIKIPEDIATODOJOBIMAGE
   newName: hinichijou/wikipedia_todo_job-production
