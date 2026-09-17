@@ -16,4 +16,8 @@ Apply the [dummysite controller](https://github.com/hinichijou/DevOpswithKuberne
 
 Apply the [dummysite resource](https://github.com/hinichijou/DevOpswithKubernetesManifests/tree/5.1/dummysite/dummysite_app/base/manifests/dummysite.yaml) with `kubectl apply -k dummysite_app/base`. The resource is applied to the `dummysite` namespace and the resources created based on the resource are applied to the same namespace.
 
-The controller will create a deployment, a service and a route resource based on the custom resource. The dummysite route will be defined by the custom resource `metadata:name` field and will be available at http://localhost:8081/`metadata:name`. The `spec:website_url` field can be used to change the copied web page but since only the first html response content is copied, more complex sites with styling and javascript fetched with additional requests will not work entirely correctly, since this was not required in task 5.1.
+The controller will create a deployment, a service and a route resource based on the custom resource. The dummysite route will be defined by the custom resource `metadata:name` field and will be available at http://localhost:8081/metadata:name. The `spec:website_url` field can be used to change the copied web page but since only the first html response content is copied, more complex sites with styling and javascript fetched with additional requests will not work entirely correctly, since this was not required in task 5.1.
+
+Screenshot of the resulting site and path using www.example.com as `website_url`:
+
+![Image of the dummysite](https://github.com/hinichijou/DevOpswithKubernetes/blob/5.1/task_screenshots/5-1.png?raw=true)
