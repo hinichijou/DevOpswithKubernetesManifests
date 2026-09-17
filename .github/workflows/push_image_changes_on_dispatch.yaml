@@ -23,12 +23,18 @@ on:
         type: string
       broadcaster_image:
         type: string
+      dummysite_app_image:
+        type: string
+      dummysite_controller_image:
+        type: string
 
 
 env:
   LOG_OUTPUT_PINGPONG_APP_KUSTOMIZATION_FOLDER: log_output_ping-pong_application
   # The return value is the one that is evaluated last
   TODO_KUSTOMIZATION_FOLDER: ${{ inputs.environment == 'production' && 'todo_app/overlays/prod' || 'todo_app/overlays/staging' }}
+  DUMMYSITE_CONTROLLER_KUSTOMIZATION_FOLDER: dummysite/dummysite_controller/base
+  DUMMYSITE_APP_KUSTOMIZATION_FOLDER: dummysite/dummysite_app/base
 
 jobs:
   build-publish:
@@ -60,8 +66,18 @@ jobs:
               inputs.broadcaster_image != ''
             }}" >> $GITHUB_OUTPUT
 
+      - name: 'Are we deploying something'
+        id: 'images'
+        run: |
+          echo "provided=${{
+              steps.lpa_images.outputs.provided == 'true' ||
+              steps.todo_images.outputs.provided == 'true' ||
+              inputs.dummysite_app_image != '' ||
+              inputs.dummysite_controller_image != ''
+            }}" >> $GITHUB_OUTPUT
+
       - name: Set up Kustomize
-        if: steps.lpa_images.outputs.provided == 'true' || steps.todo_images.outputs.provided == 'true'
+        if: steps.images.outputs.provided == 'true'
         uses: imranismail/setup-kustomize@v3
 
       - name : 'Set lpa images'
@@ -84,6 +100,20 @@ jobs:
           kustomize edit set image "${{ inputs.db_backup_job_image}}"
           kustomize edit set image "${{ inputs.broadcaster_image}}"
 
+      - name : 'Set dummysite app image'
+        if: inputs.dummysite_app_image != ''
+        shell: bash
+        working-directory: "${{ env.DUMMYSITE_APP_KUSTOMIZATION_FOLDER }}"
+        run: |
+          kustomize edit set image "${{ inputs.dummysite_app_image }}"
+
+      - name : 'Set dummysite controller image'
+        if: inputs.dummysite_controller_image != ''
+        shell: bash
+        working-directory: "${{ env.DUMMYSITE_CONTROLLER_KUSTOMIZATION_FOLDER }}"
+        run: |
+          kustomize edit set image "${{ inputs.dummysite_controller_image }}"
+
       - name: Commit lpa kustomization.yaml to GitHub
         if: steps.lpa_images.outputs.provided == 'true'
         uses: EndBug/add-and-commit@v10
@@ -102,3 +132,17 @@ jobs:
           # If I understood correctly this should be ok if tag is not provided, there won't be a tag with empty input
           tag: '${{ inputs.tag }} --force'
           tag_push: '--force'
+
+      - name: Commit dummysite app kustomization.yaml to GitHub
+        if: inputs.dummysite_app_image != ''
+        uses: EndBug/add-and-commit@v10
+        with:
+          add: '${{ env.DUMMYSITE_APP_KUSTOMIZATION_FOLDER }}/kustomization.yaml'
+          message: New dummysite application version released ${{ github.sha }}
+
+      - name: Commit dummysite controller app kustomization.yaml to GitHub
+        if: inputs.dummysite_controller_image != ''
+        uses: EndBug/add-and-commit@v10
+        with:
+          add: '${{ env.DUMMYSITE_CONTROLLER_KUSTOMIZATION_FOLDER }}/kustomization.yaml'
+          message: New dummysite controller version released ${{ github.sha }}
