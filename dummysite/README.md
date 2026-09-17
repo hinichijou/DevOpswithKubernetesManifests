@@ -20,4 +20,4 @@ The controller will create a deployment, a service and a route resource based on
 
 Screenshot of the resulting site and path using www.example.com as `website_url`:
 
-![Image of the dummysite](https://github.com/hinichijou/DevOpswithKubernetes/blob/5.1/task_screenshots/5-1.png?raw=true)
+![Image of the dummysite](https://github.com/hinichijou/DevOpswithKubernetesManifests/blob/5.1/task_screenshots/5-1.png?raw=true)
