@@ -4,7 +4,7 @@ namespace: dummysite
 configurations:
 - manifests/dummysitekind.yaml
 images:
-- digest: sha256:01eafc7c49c3533a72730e72845f13385a5dfa4c25d03b4bdf208ef527e06494
+- digest: sha256:2a30a5d6084a00fe5ffef0092601e2cbdc0db35cf2291dce412c3a8617dcf10a
   name: DUMMYSITE
   newName: hinichijou/dummysite
 resources:
