@@ -2,7 +2,8 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: dummysite-controller
 images:
-  - name: DUMMYSITECONTROLLER
-    newName: hinichijou/dummysite_controller:cwh7ly63
+- digest: sha256:30b8984028d2458e7b58a036a37cad2eb9ad4a9d4828afb1009a448e4612c0c2
+  name: DUMMYSITECONTROLLER
+  newName: hinichijou/dummysite_controller
 resources:
-  - manifests/deployment_controller_dummysite.yaml
+- manifests/deployment_controller_dummysite.yaml
