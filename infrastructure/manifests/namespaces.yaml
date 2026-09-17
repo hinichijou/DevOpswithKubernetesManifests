@@ -29,6 +29,18 @@ metadata:
 apiVersion: v1
 kind: Namespace
 metadata:
+  name: dummysite
+  labels:
+    shared-gateway-access: "true"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dummysite-controller
+---
+apiVersion: v1
+kind: Namespace
+metadata:
   name: argocd
   labels:
     shared-gateway-access: "true"
