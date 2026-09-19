@@ -4,6 +4,8 @@ Manifests that provide cross-app infrastructure. Applied this way a single gatew
 
 For the PersistentVolumes to work we need to create the local paths in the node we are binding them to. We need to create the the folders `/tmp/kube`, `/tmp/kube/todoapp-staging` and `/tmp/kube/todoapp-production` in container `k3d-k3s-default-agent-0` with `docker exec k3d-k3s-default-agent-0 mkdir -p /tmp/kube`, `docker exec k3d-k3s-default-agent-0 mkdir -p /tmp/kube/todoapp-staging` and `docker exec k3d-k3s-default-agent-0 mkdir -p /tmp/kube/todoapp-production`.
 
+The gateway resource assumes that the envoy gateway has been installed according to the instructions in the [envoy service folder](https://github.com/hinichijou/DevOpswithKubernetesManifests/tree/5.2/services/envoy_gateway)
+
 Deploy with `kubectl apply -k .`.
 
 * [gateway.yaml](https://github.com/hinichijou/DevOpswithKubernetesManifests/tree/5.1/infrastructure/manifests/gateway.yaml): defines the gateway resource for cluster service access.
