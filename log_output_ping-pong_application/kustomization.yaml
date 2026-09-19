@@ -2,7 +2,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: exercises
 images:
-- digest: sha256:9781be965af018df62304d811d1b9c522dcbe5a1d995a5162e0c97857e14c982
+- digest: sha256:4772b544d1028456c144729c7d9fc6f96a479dc4bf99fa26aa858f4179ab49b5
   name: PROJECT/LOGOUTPUTREADERIMAGE
   newName: hinichijou/log_output-reader
 - digest: sha256:0ce90bfd2870485445dac1afcb259953e4118dfc99eb2ce190d9f9983d875748
