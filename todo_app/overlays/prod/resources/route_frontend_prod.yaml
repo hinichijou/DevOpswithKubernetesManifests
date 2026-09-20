@@ -4,7 +4,7 @@ metadata:
   name: todo-frontend-route
 spec:
   parentRefs:
-  - name: infra-gateway
+  - name: infra-envoy-gateway
     namespace: infra
   rules:
   - matches:

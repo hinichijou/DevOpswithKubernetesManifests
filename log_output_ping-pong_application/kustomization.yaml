@@ -30,3 +30,6 @@ resources:
 - manifests/statefulset_postgres.yaml
 - manifests/sealed_secret_postgres.yaml
 - manifests/configmap_postgres.yaml
+- manifests/deployment_greeter.yaml
+- manifests/service_greeter.yaml
+- manifests/route_greeter.yaml

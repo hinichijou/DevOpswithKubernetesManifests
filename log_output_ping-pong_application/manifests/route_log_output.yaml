@@ -5,7 +5,7 @@ metadata:
   name: log-output-route
 spec:
   parentRefs:
-  - name: infra-gateway
+  - name: infra-istio-gateway
     namespace: infra
   rules:
   - matches:

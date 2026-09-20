@@ -8,3 +8,6 @@ data:
   PING_PONG_APP_URL: "http://pingpongapp-svc:2345"
   PING_PONG_APP_PINGS_PATH: "/pings"
   PING_PONG_APP_READY_PATH: "/ready"
+  GREETER_APP_URL: "http://greeter-svc:3000/greeter"
+  GREETER_APP_MESSAGE_PATH: "/"
+  GREETER_APP_READY_PATH: "/ready"

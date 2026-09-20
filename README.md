@@ -6,5 +6,6 @@
 ### Chapter 6
 - 5.1. [Source code](https://github.com/hinichijou/DevOpswithKubernetes/tree/5.1/dummysite) [Configurations](https://github.com/hinichijou/DevOpswithKubernetesManifests/tree/5.1/dummysite)
 - [5.2.](https://github.com/hinichijou/DevOpswithKubernetesManifests/tree/5.2/services/istio/samples)
+- 5.3. [Source code](https://github.com/hinichijou/DevOpswithKubernetes/tree/5.3/log_output_ping-pong_application/greeter) [Configurations](https://github.com/hinichijou/DevOpswithKubernetesManifests/tree/5.3/log_output_ping-pong_application#task-53)
 
 This repository contains the configuration manifests and Kubernetes cluster running instructions for the course applications. Source code for the applications can be found from [a separate repository](https://github.com/hinichijou/DevOpswithKubernetes).
