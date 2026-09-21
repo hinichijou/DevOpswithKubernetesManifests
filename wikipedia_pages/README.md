@@ -10,13 +10,15 @@ Apply with `kubectl apply -k .`
 
 Resources:
 
-* [deployment_wikipedia_pages.yaml](https://github.com/hinichijou/DevOpswithKubernetesManifests/tree/5.4/wikipedia_pages/manifests/deployment_wikipedia_pages.yaml): Defines a deployment with the main container being a Nginx server that serves the content located at the default folder `/usr/share/nginx/html` when requested at the root path. There is an initContainer that fetches the page defined by environment variable `WIKIPEDIA_URL` when the app is deployed and saves it to a file the name of which is defined by environment variable `FILE_NAME`. There is a second initContainer with the configuration `restartPolicy: Always` which makes it a sidecar. This container activates after a random timeout defined with the environemnt variables `MIN_TIMEOUT` and `MAX_TIMEOUT` and fetches new content to replace the old by requesting `https://en.wikipedia.org/wiki/Special:Random`. The containers share an emptyDir volume to share the fetched HTML data to the main container. The saved data foes not persist between application restarts.
+* [deployment_wikipedia_pages.yaml](https://github.com/hinichijou/DevOpswithKubernetesManifests/tree/5.4/wikipedia_pages/manifests/deployment_wikipedia_pages.yaml): defines a deployment with the main container being a Nginx server that serves the content located at the default folder `/usr/share/nginx/html` when requested at the root path. There is an initContainer that fetches the page defined by environment variable `WIKIPEDIA_URL` when the app is deployed and saves it to a file the name of which is defined by environment variable `FILE_NAME`. There is a second initContainer with the configuration `restartPolicy: Always` which makes it a sidecar. This container activates after a random timeout defined with the environemnt variables `MIN_TIMEOUT` and `MAX_TIMEOUT` and fetches new content to replace the old by requesting `https://en.wikipedia.org/wiki/Special:Random`. The containers share an emptyDir volume to share the fetched HTML data to the main container. The saved data does not persist between application restarts.
 
 * [service_wikipedia_pages.yaml](https://github.com/hinichijou/DevOpswithKubernetesManifests/tree/5.4/wikipedia_pages/manifests/service_wikipedia_pages.yaml): defines a service for the application that uses the Nginx default port 80.
 
 * [route_wikipedia_pages.yaml](https://github.com/hinichijou/DevOpswithKubernetesManifests/tree/5.4/wikipedia_pages/manifests/route_wikipedia_pages.yaml): defines a route resource that connects the service to the cluster Envoy gateway. There is a route rewriting rule that rewrites requests made to the gateway `/wikipedia` path to target the Nginx server root path.
 
 After deployment application is available at: http://localhost:8081/wikipedia.
+
+With the configured values the first page fetched is https://en.wikipedia.org/wiki/Kubernetes. The sidecar timeout before fetching new content will be randomized between minimum of 300 and maximum of 900 seconds.
 
 You can remove the application resources with `kubectl delete -k .`.
 
