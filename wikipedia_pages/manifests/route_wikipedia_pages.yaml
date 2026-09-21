@@ -1,0 +1,24 @@
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+  namespace: wikipedia-pages
+  name: wikipedia-pages-route
+spec:
+  parentRefs:
+  - name: infra-envoy-gateway
+    namespace: infra
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /wikipedia
+    backendRefs:
+    - name: wikipedia-pages-svc
+      port: 80
+    filters:
+      - type: URLRewrite
+        urlRewrite:
+          path:
+            # type ReplaceFullPath made more sense based on the gateway api documentation but apparently GKE Gateway Controller does not support the configuration
+            type: ReplacePrefixMatch
+            replacePrefixMatch: /

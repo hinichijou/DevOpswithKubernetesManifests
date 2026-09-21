@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wikipedia-pages
+  namespace: wikipedia_pages
+  labels:
+    app: wikipedia-pages
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wikipedia-pages
+  template:
+    metadata:
+      labels:
+        app: wikipedia-pages
+    spec:
+      containers:
+        - name: nginx-server
+          image: nginx:latest
+          volumeMounts:
+            - name: html
+              mountPath: /usr/share/nginx/html
+      initContainers:
+        - name: kubernetes-wiki-page
+          image: PAGEFETCHERIMAGE
+          volumeMounts:
+            - name: html
+              mountPath: /app/page
+          env:
+            - name: WIKIPEDIA_URL
+              value: "https://en.wikipedia.org/wiki/Kubernetes"
+            - name: FILE_NAME
+              value: "index.html"
+        - name: random-wiki-page
+          image: PAGEFETCHERIMAGE
+          # Setting restartPolicy: Always makes this a sidecar container.
+          restartPolicy: Always
+          volumeMounts:
+            - name: html
+              mountPath: /app/page
+          env:
+            - name: FILE_NAME
+              value: "index.html"
+            - name: MAX_TIMEOUT
+              value: "900"
+            - name: MIN_TIMEOUT
+              value: "300"
+      volumes:
+        - name: html
+          emptyDir: {}

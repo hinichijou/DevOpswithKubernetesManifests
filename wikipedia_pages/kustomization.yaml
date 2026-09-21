@@ -1,0 +1,10 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: wikipedia-pages
+images:
+  - name: PAGEFETCHERIMAGE
+    newName: hinichijou/wikipedia_page_fetcher
+resources:
+- manifests/route_wikipedia_pages.yaml
+- manifests/deployment_wikipedia_pages.yaml
+- manifests/service_wikipedia_pages.yaml

@@ -4,15 +4,15 @@ Manifests that provide cross-app infrastructure. Applied this way a single gatew
 
 For the PersistentVolumes to work we need to create the local paths in the node we are binding them to. We need to create the the folders `/tmp/kube`, `/tmp/kube/todoapp-staging` and `/tmp/kube/todoapp-production` in container `k3d-k3s-default-agent-0` with `docker exec k3d-k3s-default-agent-0 mkdir -p /tmp/kube`, `docker exec k3d-k3s-default-agent-0 mkdir -p /tmp/kube/todoapp-staging` and `docker exec k3d-k3s-default-agent-0 mkdir -p /tmp/kube/todoapp-production`.
 
-The Envoy gateway resource assumes that the Envoy gateway has been installed according to the instructions in the [envoy service folder](https://github.com/hinichijou/DevOpswithKubernetesManifests/tree/5.3/services/envoy_gateway)
+The Envoy gateway resource assumes that the Envoy gateway has been installed according to the instructions in the [envoy service folder](https://github.com/hinichijou/DevOpswithKubernetesManifests/tree/5.4/services/envoy_gateway)
 
-The Istio gateway resource assumes that the Istio gateway has been installed according to the instructions in the [istio service folder](https://github.com/hinichijou/DevOpswithKubernetesManifests/tree/5.3/services/istio)
+The Istio gateway resource assumes that the Istio gateway has been installed according to the instructions in the [istio service folder](https://github.com/hinichijou/DevOpswithKubernetesManifests/tree/5.4/services/istio)
 
 Deploy with `kubectl apply -k .`.
 
-* [envoy-gateway.yaml](https://github.com/hinichijou/DevOpswithKubernetesManifests/tree/5.3/infrastructure/manifests/envoy-gateway.yaml): defines a Envoy gateway resource for cluster access. The Envoy gateway is configured to listen to the loadbalancer in port 80.
-* [istio-gateway.yaml](https://github.com/hinichijou/DevOpswithKubernetesManifests/tree/5.3/infrastructure/manifests/istio-gateway.yaml): defines an Istio gateway resource for cluster access. The Istio gateway is configured to listen to the loadbalancer in port 81.
-* [namespaces.yaml](https://github.com/hinichijou/DevOpswithKubernetesManifests/tree/5.3/infrastructure/manifests/namespaces.yaml): defines all of the project namespaces and a rule if the namespace is allowed to attach routes to the gateway.
-* [persistentvolumes.yaml](https://github.com/hinichijou/DevOpswithKubernetesManifests/tree/5.3/infrastructure/manifests/persistentvolumes.yaml): defines the project persistent volumes which the applications in turn claim.
+* [envoy-gateway.yaml](https://github.com/hinichijou/DevOpswithKubernetesManifests/tree/5.4/infrastructure/manifests/envoy-gateway.yaml): defines a Envoy gateway resource for cluster access. The Envoy gateway is configured to listen to the loadbalancer in port 80.
+* [istio-gateway.yaml](https://github.com/hinichijou/DevOpswithKubernetesManifests/tree/5.4/infrastructure/manifests/istio-gateway.yaml): defines an Istio gateway resource for cluster access. The Istio gateway is configured to listen to the loadbalancer in port 81.
+* [namespaces.yaml](https://github.com/hinichijou/DevOpswithKubernetesManifests/tree/5.4/infrastructure/manifests/namespaces.yaml): defines all of the project namespaces and a rule if the namespace is allowed to attach routes to the gateway.
+* [persistentvolumes.yaml](https://github.com/hinichijou/DevOpswithKubernetesManifests/tree/5.4/infrastructure/manifests/persistentvolumes.yaml): defines the project persistent volumes which the applications in turn claim.
 
 You can a namespace as the default namespace by running `kubectl config set-context --current --namespace=namespace-name` or if you have [kubens](https://github.com/ahmetb/kubectx) installed more conviniently with `kubens namespace-name`. You can check the current active namespace by checking current context namespace with `kubectl config view` or just by calling `kubens`.

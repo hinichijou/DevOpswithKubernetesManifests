@@ -41,6 +41,13 @@ metadata:
 apiVersion: v1
 kind: Namespace
 metadata:
+  name: wikipedia-pages
+  labels:
+    shared-gateway-access: "true"
+---
+apiVersion: v1
+kind: Namespace
+metadata:
   name: argocd
   labels:
     shared-gateway-access: "true"
