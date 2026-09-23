@@ -16,15 +16,12 @@ configMapGenerator:
   - assets/information.txt
   name: information-txt-config
 resources:
-- manifests/analysistemplate_cpu_usage.yaml
 - manifests/persistentvolumeclaim_log_output.yaml
 - manifests/configmap_log_output.yaml
 - manifests/deployment_log_output.yaml
 - manifests/service_log_output_reader.yaml
 - manifests/route_log_output.yaml
-- manifests/rollout_ping_pong.yaml
-- manifests/deployment_ping_pong.yaml
-- manifests/service_ping_pong.yaml
+- manifests/knative_service_ping_pong.yaml
 - manifests/route_ping_pong.yaml
 - manifests/service_postgres.yaml
 - manifests/statefulset_postgres.yaml

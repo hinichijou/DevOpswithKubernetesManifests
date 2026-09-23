@@ -9,5 +9,6 @@
 - 5.3. [Source code](https://github.com/hinichijou/DevOpswithKubernetes/tree/5.3/log_output_ping-pong_application/greeter) [Configurations](https://github.com/hinichijou/DevOpswithKubernetesManifests/tree/5.3/log_output_ping-pong_application#task-53)
 - 5.4. [Source code](https://github.com/hinichijou/DevOpswithKubernetes/tree/5.4/wikipedia_page_fetcher) [Configurations](https://github.com/hinichijou/DevOpswithKubernetesManifests/tree/5.4/wikipedia_pages)
 - [5.6.](https://github.com/hinichijou/DevOpswithKubernetesManifests/tree/5.6/services/knative)
+- [5.7.](https://github.com/hinichijou/DevOpswithKubernetesManifests/tree/5.7/log_output_ping-pong_application#task-57)
 
 This repository contains the configuration manifests and Kubernetes cluster running instructions for the course applications. Source code for the applications can be found from [a separate repository](https://github.com/hinichijou/DevOpswithKubernetes).

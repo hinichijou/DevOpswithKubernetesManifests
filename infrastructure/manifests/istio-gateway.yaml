@@ -8,7 +8,7 @@ spec:
   listeners:
   - name: http
     protocol: HTTP
-    port: 81
+    port: 80
     allowedRoutes:
       kinds:
       - kind: HTTPRoute

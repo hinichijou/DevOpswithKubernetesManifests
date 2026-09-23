@@ -1,0 +1,33 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  namespace: exercises
+  name: pingpongapp-svc
+spec:
+  template:
+    spec:
+      containers:
+      - image: PROJECT/PINGPONGAPPIMAGE
+        env:
+          - name: PGPASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: secret-postgres-config
+                key: POSTGRES_PASSWORD
+        envFrom:
+          - configMapRef:
+              name: postgres-config
+        livenessProbe:
+          initialDelaySeconds: 5 # Initial delay until the liveness is tested
+          periodSeconds: 5 # How often to test
+          httpGet:
+              path: /health
+              port: 3000
+        readinessProbe:
+          initialDelaySeconds: 10 # Initial delay until the readiness is tested
+          periodSeconds: 5 # How often to test
+          httpGet:
+              path: /ready
+              port: 3000
+        ports:
+        - containerPort: 3000

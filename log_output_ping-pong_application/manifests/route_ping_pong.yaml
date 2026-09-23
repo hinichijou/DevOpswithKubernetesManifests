@@ -14,10 +14,11 @@ spec:
         value: /pingpong
     backendRefs:
     - name: pingpongapp-svc
-      port: 2345
+      port: 80
     filters:
       - type: URLRewrite
         urlRewrite:
+          hostname: pingpongapp-svc.exercises.127.0.0.1.sslip.io
           path:
             # type ReplaceFullPath made more sense based on the gateway api documentation but apparently GKE Gateway Controller does not support the configuration
             type: ReplacePrefixMatch

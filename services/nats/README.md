@@ -1,4 +1,4 @@
-It is assumed that the [infrastructure folder](https://github.com/hinichijou/DevOpswithKubernetesManifests/tree/5.3/infrastructure) resources are applied first. This creates the necessary namespace(s).
+It is assumed that the [infrastructure folder](https://github.com/hinichijou/DevOpswithKubernetesManifests/tree/5.7/infrastructure) resources are applied first. This creates the necessary namespace(s).
 
 Install [NATS](https://docs.nats.io/) to the cluster with:
 ```

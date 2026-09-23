@@ -7,12 +7,12 @@ kubectl apply --server-side -n argocd -f https://raw.githubusercontent.com/argop
 
 Apply manifests with `kubectl apply -k .`.
 
-* [route_argocd.yaml](https://github.com/hinichijou/DevOpswithKubernetesManifests/tree/5.3/services/argocd/manifests/route_argocd.yaml): defines the route resource for accessing the ArgoCD service that is used for managing application deployments.
-* [configmap_argocd.yaml](https://github.com/hinichijou/DevOpswithKubernetesManifests/tree/5.3/services/argocd/manifests/configmap_argocd.yaml): see [instructions](https://argo-cd.readthedocs.io/en/stable/operator-manual/ingress/#gateway-api-example). Uses `server.insecure: "true"` to allow http traffic, for remote use this could be ok also but we would need to enforce https on gateway level in that case. Other option would be to enforce https on gateway level and use self-signed certificates for local testing. Exposing with a LoadBalancer instead would allow a direct https connection from the browser.
+* [route_argocd.yaml](https://github.com/hinichijou/DevOpswithKubernetesManifests/tree/5.7/services/argocd/manifests/route_argocd.yaml): defines the route resource for accessing the ArgoCD service that is used for managing application deployments.
+* [configmap_argocd.yaml](https://github.com/hinichijou/DevOpswithKubernetesManifests/tree/5.7/services/argocd/manifests/configmap_argocd.yaml): see [instructions](https://argo-cd.readthedocs.io/en/stable/operator-manual/ingress/#gateway-api-example). Uses `server.insecure: "true"` to allow http traffic, for remote use this could be ok also but we would need to enforce https on gateway level in that case. Other option would be to enforce https on gateway level and use self-signed certificates for local testing. Exposing with a LoadBalancer instead would allow a direct https connection from the browser.
 
 After applying the configmap changes you may have to restart the ArgoCD server with `kubectl rollout restart deployment.apps/argocd-server -n argocd` for the changes to be applied. Because of browser caching you may have to clear the browser cookies.
 
-[Applications folder](https://github.com/hinichijou/DevOpswithKubernetesManifests/tree/5.3/services/argocd/applications/applicationset_todo_app.yaml) holds application manifests that need to be applied for applications that have Argo CD app configuration manifests.
+[Applications folder](https://github.com/hinichijou/DevOpswithKubernetesManifests/tree/5.7/services/argocd/applications/applicationset_todo_app.yaml) holds application manifests that need to be applied for applications that have Argo CD app configuration manifests.
 
 * Apply todo app application manifest with `kubectl apply -f applications/applicationset_todo_app.yaml`, delete with `kubectl delete -f applications/applicationset_todo_app.yaml`.
 
